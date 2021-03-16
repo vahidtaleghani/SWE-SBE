@@ -1,6 +1,6 @@
 package at.technikumwien.swe;
 
-enum HttpMethod {
+public enum HttpMethod {
     GET("GET"),
     POST("POST"),
     PUT("PUT"),

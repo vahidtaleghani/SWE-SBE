@@ -1,8 +1,9 @@
 package at.technikumwien.swe;
 
+import at.technikumwien.swe.routes.BasicRoute;
+
 import java.io.IOException;
 import java.net.Socket;
-
 
 public class ServerThread implements Runnable {
 
@@ -25,10 +26,25 @@ public class ServerThread implements Runnable {
                 System.out.println("payload: " + request.getPayload());
                 System.out.println("Content-Type: " + request.getContentType());
             }
+            Response response = null;
+            if (request.isValid()) {
 
+                for (BasicRoute route : SebServer.routeList) {
+                    if (route.isResponsibleFor(request)) {
+                        response = route.processRequest(request);
+                        break;
+                    }
+                }
 
-            // ToDo: Handle Request
+                if (response == null) { // 404
+                    response = Response.Default.notFound();
+                }
 
+            } else {
+                response = Response.Default.badRequest("Invalid HTTP request");
+            }
+
+            response.send(connect.getOutputStream());
 
             connect.close();
 
