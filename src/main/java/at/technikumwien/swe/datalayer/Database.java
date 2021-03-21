@@ -1,4 +1,4 @@
-package at.technikumwien.swe.repository;
+package at.technikumwien.swe.datalayer;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -39,5 +39,9 @@ public class Database {
             e.printStackTrace();
             throw new RuntimeException("DB connection failed" + e.getMessage(), e);
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

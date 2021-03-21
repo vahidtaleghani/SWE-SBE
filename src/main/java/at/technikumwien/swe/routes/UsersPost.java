@@ -3,6 +3,8 @@ package at.technikumwien.swe.routes;
 import at.technikumwien.swe.HttpMethod;
 import at.technikumwien.swe.Request;
 import at.technikumwien.swe.Response;
+import at.technikumwien.swe.datalayer.models.UserModel;
+import at.technikumwien.swe.datalayer.repositories.UserRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,39 +19,43 @@ public class UsersPost implements BasicRoute {
     @Override
     public Response processRequest(Request request) {
 
-        // Json to Java Object POJO
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        TransferUser tUser = null;
+        TransferUser transferUser;
         try {
-            tUser = objectMapper.readValue(request.getPayload(), TransferUser.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+            transferUser = objectMapper.readValue(request.getPayload(), TransferUser.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            return Response.Default.invalidJsonProvided();
         }
 
-        System.out.println(tUser);
+        UserRepository repository = new UserRepository();
 
+        // ToDo: Hash Password!
 
-        Response response = new Response();
-        response.setStatusCode(Response.StatusCode.OK);
-        response.setPayload("Hello World from Users via POST!");
+        UserModel user = repository.getUser(transferUser.username);
 
+        if (user != null || !repository.addUser(transferUser.toModel())) {
+            return Response.Default.badRequest("User already exists");
+        }
 
-        return response;
+        return Response.Default.ok();
+    }
+
+    private static class TransferUser {
+        @JsonProperty("Username")
+        private String username;
+
+        @JsonProperty("Password")
+        private String password;
+
+        @Override
+        public String toString() {
+            return "[username=" + username + ";password=" + password + "]";
+        }
+
+        public UserModel toModel() {
+            return new UserModel(username, password);
+        }
     }
 }
 
-
-class TransferUser {
-    @JsonProperty("Username")
-    public String username;
-
-    @JsonProperty("Password")
-    public String password;
-
-    @Override
-    public String toString() {
-        return "[username=" + username + ";password=" + password + "]";
-    }
-}

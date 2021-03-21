@@ -74,6 +74,12 @@ public class Response {
     }
 
     public static class Default {
+        public static Response ok() {
+            return new Response()
+                    .setStatusCode(StatusCode.OK)
+                    .setPayload("OK");
+        }
+
         public static Response notFound() {
             return new Response()
                     .setStatusCode(StatusCode.NOT_FOUND)
@@ -88,6 +94,10 @@ public class Response {
 
         public static Response badRequest() {
             return badRequest("");
+        }
+
+        public static Response invalidJsonProvided() {
+            return badRequest("Invalid JSON provided. Please check your request body");
         }
     }
 
