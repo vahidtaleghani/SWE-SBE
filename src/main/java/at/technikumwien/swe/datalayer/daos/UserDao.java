@@ -25,7 +25,8 @@ public class UserDao {
 
             if (results.next()) return new UserEntity(
                     results.getString("username"),
-                    results.getString("password")
+                    results.getString("password"),
+                    results.getString("token")
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -35,12 +36,13 @@ public class UserDao {
 
     public boolean create(UserEntity userEntity) {
         if (userEntity == null) return false;
-        String command = "INSERT INTO users (username, password) VALUES (?, ?)";
+        String command = "INSERT INTO users (username, password, token) VALUES (?, ?, ?)";
 
         try {
             PreparedStatement stmt = connection.prepareStatement(command);
             stmt.setString(1, userEntity.getUsername());
             stmt.setString(2, userEntity.getPassword());
+            stmt.setString(3, userEntity.getToken());
 
             stmt.execute();
         } catch (SQLException e) {

@@ -54,7 +54,7 @@ public class UsersPost implements BasicRoute {
         }
 
         public UserModel toModel() {
-            return new UserModel(username, password);
+            return UserModel.initiateNewUserModel(username, password);
         }
     }
 }
