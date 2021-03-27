@@ -1,5 +1,8 @@
 package at.technikumwien.swe;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -56,10 +59,12 @@ public class Response {
     public enum StatusCode {
 
         OK("200 OK"),
+        UNAUTHORIZED("401 Unauthorized"),
         NOT_FOUND("404 Not Found"),
         NOT_IMPLEMENTED("501 Not Implemented"),
         BAD_REQUEST("400 Bad Request"),
-        LENGTH_REQUIRED("411 Length Required");
+        LENGTH_REQUIRED("411 Length Required"),
+        INTERNAL_SERVER_ERROR("500 Internal Server Error");
 
         private final String label;
 
@@ -80,6 +85,25 @@ public class Response {
                     .setPayload("OK");
         }
 
+        public static Response json(Object object) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+                return new Response()
+                        .setStatusCode(StatusCode.OK)
+                        .setPayload(json);
+            } catch (JsonProcessingException e) {
+                System.out.println("Error! Could not convert object to JSON!");
+                return internalServererror();
+            }
+        }
+
+        public static Response unauthorized(String message) {
+            return new Response()
+                    .setStatusCode(StatusCode.UNAUTHORIZED)
+                    .setPayload(StatusCode.UNAUTHORIZED.getLabel() + "\r\n" + message);
+        }
+
         public static Response notFound() {
             return new Response()
                     .setStatusCode(StatusCode.NOT_FOUND)
@@ -98,6 +122,13 @@ public class Response {
 
         public static Response invalidJsonProvided() {
             return badRequest("Invalid JSON provided. Please check your request body");
+        }
+
+        public static Response internalServererror() {
+            return new Response()
+                    .setStatusCode(StatusCode.INTERNAL_SERVER_ERROR)
+                    .setPayload(StatusCode.INTERNAL_SERVER_ERROR.getLabel());
+
         }
     }
 

@@ -24,13 +24,10 @@ public class UsersPost implements BasicRoute {
             ObjectMapper objectMapper = new ObjectMapper();
             transferUser = objectMapper.readValue(request.getPayload(), TransferUser.class);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
             return Response.Default.invalidJsonProvided();
         }
 
         UserRepository repository = new UserRepository();
-
-        // ToDo: Hash Password!
 
         UserModel user = repository.getUser(transferUser.username);
 

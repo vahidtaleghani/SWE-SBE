@@ -19,6 +19,10 @@ public class UserModel {
         this.token = token;
     }
 
+    public String getToken() {
+        return token;
+    }
+
     public static UserModel initiateNewUserModel(String username, String password) {
         return new UserModel(
                 username,
@@ -37,8 +41,10 @@ public class UserModel {
         return Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public boolean validatePassword(String password) {
+        if (password == null) return false;
+        String hashedPassword = hashPassword(password);
+        return (hashedPassword.equals(this.passwordHash));
     }
 
     public UserEntity toEntity() {
