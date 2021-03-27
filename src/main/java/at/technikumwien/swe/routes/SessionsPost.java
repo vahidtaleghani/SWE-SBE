@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class SessionsPost implements BasicRoute {
+public class SessionsPost extends BasicRoute {
 
     @Override
     public boolean isResponsibleFor(Request request) {

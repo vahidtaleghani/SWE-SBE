@@ -14,6 +14,12 @@ public class UserRepository {
         return user.toModel();
     }
 
+    public UserModel getUserByToken(String token) {
+        UserEntity user = userDao.getOneByToken(token);
+        if (user == null) return null;
+        return user.toModel();
+    }
+
     public boolean addUser(UserModel userModel) {
         if (userModel == null) return false;
         return userDao.create(userModel.toEntity());

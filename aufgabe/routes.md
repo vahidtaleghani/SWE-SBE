@@ -3,8 +3,8 @@
 |Done?|Method|URL|Auth?|Content?|
 |---|---|---|---|---|
 |yes|POST|/users|no|yes|
-| |POST|/sessions|no|yes|
-| |GET|/users/{username}|yes|no|
+|yes|POST|/sessions|no|yes|
+|yes|GET|/users/{username}|yes|no|
 | |PUT|/users/{username}|yes|yes|
 | |GET|/stats|yes|no|
 | |GET|/scoreboard|yes|no|

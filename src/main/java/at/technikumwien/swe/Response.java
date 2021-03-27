@@ -13,6 +13,7 @@ public class Response {
 
     private StatusCode statusCode;
     private String payload;
+    private ContentType contentType = ContentType.TEXT;
 
     public Response() {
     }
@@ -27,6 +28,10 @@ public class Response {
         return this;
     }
 
+    public Response setContentType(ContentType contentType) {
+        this.contentType = contentType;
+        return this;
+    }
 
     public void send(OutputStream outputStream) {
 
@@ -37,7 +42,7 @@ public class Response {
             out.write("HTTP/1.1 " + statusCode.getLabel() + "\r\n");
             out.write("Server: Java HTTP Server for SWE 1: 1.0\r\n");
             out.write("Date: " + new Date() + "\r\n");
-            out.write("Content-Type: text/plain\r\n");
+            out.write("Content-Type: " + contentType.value + "\r\n");
 
             if (payload != null && !payload.isEmpty()) {
                 out.write("Content-Length: " + payload.length() + "\r\n");
@@ -91,6 +96,7 @@ public class Response {
                 String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
                 return new Response()
                         .setStatusCode(StatusCode.OK)
+                        .setContentType(ContentType.JSON)
                         .setPayload(json);
             } catch (JsonProcessingException e) {
                 System.out.println("Error! Could not convert object to JSON!");

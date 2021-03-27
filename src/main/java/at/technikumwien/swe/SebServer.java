@@ -2,6 +2,7 @@ package at.technikumwien.swe;
 
 import at.technikumwien.swe.routes.BasicRoute;
 import at.technikumwien.swe.routes.SessionsPost;
+import at.technikumwien.swe.routes.UsersGet;
 import at.technikumwien.swe.routes.UsersPost;
 
 import java.io.IOException;
@@ -49,5 +50,6 @@ public class SebServer {
     public static void initializeRoutes() {
         routeList.add(new UsersPost());
         routeList.add(new SessionsPost());
+        routeList.add(new UsersGet());
     }
 }
