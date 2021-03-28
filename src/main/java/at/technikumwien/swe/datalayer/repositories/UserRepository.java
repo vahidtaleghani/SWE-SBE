@@ -24,4 +24,9 @@ public class UserRepository {
         if (userModel == null) return false;
         return userDao.create(userModel.toEntity());
     }
+
+    public boolean updateUser(UserModel userModel) {
+        if (userModel == null) return false;
+        return userDao.update(userModel.toEntity());
+    }
 }

@@ -64,6 +64,7 @@ public class UserDao {
 
         try {
             PreparedStatement stmt = connection.prepareStatement(command);
+
             stmt.setString(1, userEntity.getUsername());
             stmt.setString(2, userEntity.getPassword());
             stmt.setString(3, userEntity.getToken());
@@ -76,6 +77,34 @@ public class UserDao {
 
             if (userEntity.getImage() == null) stmt.setNull(6, Types.VARCHAR);
             else stmt.setString(6, userEntity.getImage());
+
+            stmt.execute();
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean update(UserEntity userEntity) {
+        if (userEntity == null) return false;
+        String command = "UPDATE users SET  password = ?, token = ?, name = ?, biography = ?, image = ? WHERE username = ?;";
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(command);
+
+            stmt.setString(1, userEntity.getPassword());
+            stmt.setString(2, userEntity.getToken());
+
+            if (userEntity.getName() == null) stmt.setNull(3, Types.VARCHAR);
+            else stmt.setString(3, userEntity.getName());
+
+            if (userEntity.getBiography() == null) stmt.setNull(4, Types.VARCHAR);
+            else stmt.setString(4, userEntity.getBiography());
+
+            if (userEntity.getImage() == null) stmt.setNull(5, Types.VARCHAR);
+            else stmt.setString(5, userEntity.getImage());
+
+            stmt.setString(6, userEntity.getUsername());
 
             stmt.execute();
         } catch (SQLException e) {

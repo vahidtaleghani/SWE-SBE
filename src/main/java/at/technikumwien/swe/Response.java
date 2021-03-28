@@ -100,7 +100,7 @@ public class Response {
                         .setPayload(json);
             } catch (JsonProcessingException e) {
                 System.out.println("Error! Could not convert object to JSON!");
-                return internalServererror();
+                return internalServerError();
             }
         }
 
@@ -130,7 +130,7 @@ public class Response {
             return badRequest("Invalid JSON provided. Please check your request body");
         }
 
-        public static Response internalServererror() {
+        public static Response internalServerError() {
             return new Response()
                     .setStatusCode(StatusCode.INTERNAL_SERVER_ERROR)
                     .setPayload(StatusCode.INTERNAL_SERVER_ERROR.getLabel());

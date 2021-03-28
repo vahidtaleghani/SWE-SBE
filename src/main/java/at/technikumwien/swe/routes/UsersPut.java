@@ -4,16 +4,18 @@ import at.technikumwien.swe.HttpMethod;
 import at.technikumwien.swe.Request;
 import at.technikumwien.swe.Response;
 import at.technikumwien.swe.datalayer.models.UserModel;
+import at.technikumwien.swe.datalayer.repositories.UserRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class UsersGet extends BasicRoute {
-
+public class UsersPut extends BasicRoute {
     private static final String routePrefix = "/users/";
 
     @Override
     public boolean isResponsibleFor(Request request) {
         return
-                request.getMethod() == HttpMethod.GET &&
+                request.getMethod() == HttpMethod.PUT &&
                         request.getPath().startsWith(routePrefix) &&
                         request.getPath().length() > routePrefix.length();
     }
@@ -30,38 +32,39 @@ public class UsersGet extends BasicRoute {
             return Response.Default.unauthorized("You are not authorized to view this profile");
         }
 
-        return Response.Default.json(TransferUser.fromModel(loggedUser));
+        TransferUser newUserDetails;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            newUserDetails = objectMapper.readValue(request.getPayload(), TransferUser.class);
+        } catch (JsonProcessingException e) {
+            return Response.Default.invalidJsonProvided();
+        }
+
+        loggedUser.setName(newUserDetails.name);
+        loggedUser.setBiography(newUserDetails.biography);
+        loggedUser.setImage(newUserDetails.image);
+
+        System.out.println(loggedUser);
+
+        UserRepository repository = new UserRepository();
+
+        if (!repository.updateUser(loggedUser)) {
+            return Response.Default.internalServerError();
+        }
+
+        return Response.Default.ok();
     }
 
-
-    @SuppressWarnings("FieldCanBeLocal")
+    @SuppressWarnings("FieldMayBeFinal")
     private static class TransferUser {
-        @JsonProperty("Username")
-        private final String username;
 
         @JsonProperty("Name")
-        private final String name;
+        private String name = null;
 
         @JsonProperty("Bio")
-        private final String biography;
+        private String biography = null;
 
         @JsonProperty("Image")
-        private final String image;
-
-        public TransferUser(String username, String name, String biography, String image) {
-            this.username = username;
-            this.name = name;
-            this.biography = biography;
-            this.image = image;
-        }
-
-        static TransferUser fromModel(UserModel userModel) {
-            return new TransferUser(
-                    userModel.getUsername(),
-                    userModel.getName(),
-                    userModel.getBiography(),
-                    userModel.getImage()
-            );
-        }
+        private String image = null;
     }
 }
