@@ -5,12 +5,12 @@
 |yes|POST|/users|no|yes|
 |yes|POST|/sessions|no|yes|
 |yes|GET|/users/{username}|yes|no|
-| |PUT|/users/{username}|yes|yes|
+|yes|PUT|/users/{username}|yes|yes|
 | |GET|/stats|yes|no|
 | |GET|/scoreboard|yes|no|
 | |GET|/history|yes|no|
 | |GET|/tournament|yes|no|
-| |POST|/history|yes|yes|
+|yes|POST|/history|yes|yes|
 
 ## Registrierung
 

@@ -6,7 +6,7 @@ import at.technikumwien.swe.datalayer.models.UserModel;
 
 public class UserRepository {
 
-    UserDao userDao = new UserDao();
+    private final UserDao userDao = new UserDao();
 
     public UserModel getUser(String username) {
         UserEntity user = userDao.getOne(username);
