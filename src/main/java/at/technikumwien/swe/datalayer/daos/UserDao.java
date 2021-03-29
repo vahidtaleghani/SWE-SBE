@@ -1,9 +1,12 @@
 package at.technikumwien.swe.datalayer.daos;
 
 import at.technikumwien.swe.datalayer.Database;
+import at.technikumwien.swe.datalayer.entities.UserEloEntity;
 import at.technikumwien.swe.datalayer.entities.UserEntity;
 
 import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class UserDao {
 
@@ -116,5 +119,70 @@ public class UserDao {
             return false;
         }
         return true;
+    }
+
+    public UserEloEntity getOneWithElo(UserEntity userEntity) {
+        return getAllWithElo(userEntity).get(0);
+    }
+
+    public List<UserEloEntity> getAllWithElo() {
+        return getAllWithElo(null);
+    }
+
+    private List<UserEloEntity> getAllWithElo(UserEntity userEntity) {
+        String whereCondition = ((userEntity != null) ? " WHERE u.username = ? " : " ");
+        String command = """
+                        SELECT (
+                            100 +
+                            -1 * coalesce(
+                               (SELECT COUNT(*)
+                                FROM push_ups p
+                                WHERE p.username = u.username
+                                  AND tournament_state = 2
+                                GROUP BY p.username), 
+                                0
+                            )
+                           +
+                           2 * coalesce(
+                               (SELECT COUNT(*)
+                                FROM push_ups p
+                                WHERE p.username = u.username
+                                  AND tournament_state = 3
+                                GROUP BY p.username),
+                                0
+                            )
+                        ) AS elo,
+                        u.*
+                                
+                        FROM users u
+                """ + whereCondition + """
+                        ORDER BY elo DESC
+                ;
+                """;
+
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(command);
+            if (userEntity != null) {
+                stmt.setString(1, userEntity.getUsername());
+            }
+
+            ResultSet results = stmt.executeQuery();
+
+
+            List<UserEloEntity> userEloEntityList = new LinkedList<>();
+            while (results.next()) {
+                userEloEntityList.add(new UserEloEntity(
+                        userRowToEntity(results),
+                        results.getInt("elo")
+                ));
+            }
+
+            return userEloEntityList;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("couldnt find user! " + e.getMessage());
+        }
     }
 }

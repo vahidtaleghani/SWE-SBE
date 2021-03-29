@@ -2,6 +2,7 @@ package at.technikumwien.swe.datalayer.daos;
 
 import at.technikumwien.swe.datalayer.Database;
 import at.technikumwien.swe.datalayer.entities.PushUpEntity;
+import at.technikumwien.swe.datalayer.entities.UserEntity;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +18,7 @@ public class PushUpDao {
     public List<PushUpEntity> getAll(String username) {
         if (username == null) return null;
 
-        String command = "SELECT id, username, workout_name, amount, duration FROM push_ups WHERE username = ?";
+        String command = "SELECT id, username, workout_name, amount, duration, tournament_state FROM push_ups WHERE username = ?";
 
         try {
             PreparedStatement stmt = connection.prepareStatement(command);
@@ -43,7 +44,8 @@ public class PushUpDao {
                 result.getString("username"),
                 result.getString("workout_name"),
                 result.getInt("amount"),
-                result.getInt("duration")
+                result.getInt("duration"),
+                result.getInt("tournament_state")
         );
     }
 
@@ -65,5 +67,30 @@ public class PushUpDao {
             return false;
         }
         return true;
+    }
+
+    public int getCount(UserEntity userEntity) {
+        if (userEntity == null) throw new RuntimeException("Cannot count from userEntity = null");
+
+        String command = "SELECT SUM(amount) AS total FROM push_ups WHERE username = ?";
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(command);
+            stmt.setString(1, userEntity.getUsername());
+
+            ResultSet results = stmt.executeQuery();
+
+            List<PushUpEntity> pushUpList = new LinkedList<>();
+            if (!results.next()) {
+                throw new RuntimeException("No result retrieved from SUM()");
+            }
+
+            return results.getInt("total");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Couldn't query DB: " + e.getMessage());
+        }
+
     }
 }

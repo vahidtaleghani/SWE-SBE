@@ -6,9 +6,9 @@
 |yes|POST|/sessions|no|yes|
 |yes|GET|/users/{username}|yes|no|
 |yes|PUT|/users/{username}|yes|yes|
-| |GET|/stats|yes|no|
+|yes|GET|/stats|yes|no|
 | |GET|/scoreboard|yes|no|
-| |GET|/history|yes|no|
+|yes|GET|/history|yes|no|
 | |GET|/tournament|yes|no|
 |yes|POST|/history|yes|yes|
 

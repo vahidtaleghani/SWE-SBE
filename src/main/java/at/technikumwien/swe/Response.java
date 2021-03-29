@@ -102,7 +102,7 @@ public class Response {
                         .setContentType(ContentType.JSON)
                         .setPayload(json);
             } catch (JsonProcessingException e) {
-                System.out.println("Error! Could not convert object to JSON!");
+                System.out.println("Error! Could not convert object to JSON! " + e.getMessage());
                 return internalServerError();
             }
         }
