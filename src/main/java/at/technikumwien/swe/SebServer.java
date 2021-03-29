@@ -50,5 +50,6 @@ public class SebServer {
         routeList.add(new UsersGet());
         routeList.add(new UsersPut());
         routeList.add(new HistoryPost());
+        routeList.add(new HistoryGet());
     }
 }

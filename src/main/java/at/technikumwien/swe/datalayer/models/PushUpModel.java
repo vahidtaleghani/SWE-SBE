@@ -16,11 +16,7 @@ public class PushUpModel {
     }
 
     public PushUpModel(String username, String workoutName, int amount, int duration) {
-        this.id = -1;
-        this.username = username;
-        this.workoutName = workoutName;
-        this.amount = amount;
-        this.duration = duration;
+        this(-1, username, workoutName, amount, duration);
     }
 
     public int getId() {
