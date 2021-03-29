@@ -21,6 +21,9 @@ public class UsersPost extends BasicRoute {
 
         TransferUser transferUser;
         try {
+            //in json konvertieren und umgekehrt
+            //verwenden die readValue-Methode, um JSON-Daten in ein Objekt zu konvertieren
+            //hat zwei Eingaben, eine ist JSON-Daten und andere ist die Klasse
             ObjectMapper objectMapper = new ObjectMapper();
             transferUser = objectMapper.readValue(request.getPayload(), TransferUser.class);
         } catch (JsonProcessingException e) {

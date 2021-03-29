@@ -23,6 +23,7 @@ public class UsersGet extends BasicRoute {
 
         String requestedUserName = request.getPath().substring(routePrefix.length());
 
+        // speichern alle informationen zu angemeldeten Benutzern
         UserModel loggedUser = validateToken(request.getHeaders().get("authorization"));
         if (loggedUser == null) return Response.Default.unauthorized("No valid authorization token provided.");
 

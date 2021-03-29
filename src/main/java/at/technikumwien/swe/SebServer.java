@@ -12,12 +12,11 @@ public class SebServer {
 
     public static final boolean verbose = true;
     // Port zum Abhören der Verbindung
-    private static final int PORT = 8000;
+    private static final int PORT = 10001;
 
     public static final List<BasicRoute> routeList = new LinkedList<>();
 
     // Clientverbindung über Socket-Klasse
-
     public static void main(String[] args) {
 
         SebServer.initializeRoutes();

@@ -61,6 +61,7 @@ public class Response {
         }
     }
 
+    //---- StatusCode
     public enum StatusCode {
 
         OK("200 OK"),
@@ -84,12 +85,14 @@ public class Response {
     }
 
     public static class Default {
+        //--- OK
         public static Response ok() {
             return new Response()
                     .setStatusCode(StatusCode.OK)
                     .setPayload("OK");
         }
 
+        //--- JSON
         public static Response json(Object object) {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
@@ -104,37 +107,42 @@ public class Response {
             }
         }
 
+        //--- unauthorized
         public static Response unauthorized(String message) {
             return new Response()
                     .setStatusCode(StatusCode.UNAUTHORIZED)
                     .setPayload(StatusCode.UNAUTHORIZED.getLabel() + "\r\n" + message);
         }
 
+        //--- notFound
         public static Response notFound() {
             return new Response()
                     .setStatusCode(StatusCode.NOT_FOUND)
                     .setPayload(StatusCode.NOT_FOUND.getLabel());
         }
 
+        //--- badRequest
         public static Response badRequest(String message) {
             return new Response()
                     .setStatusCode(StatusCode.BAD_REQUEST)
                     .setPayload(StatusCode.BAD_REQUEST.getLabel() + "\r\n" + message);
         }
 
+        //--- badRequest
         public static Response badRequest() {
             return badRequest("");
         }
 
+        //--- invalidJsonProvided
         public static Response invalidJsonProvided() {
             return badRequest("Invalid JSON provided. Please check your request body");
         }
 
+        //--- internalServerError
         public static Response internalServerError() {
             return new Response()
                     .setStatusCode(StatusCode.INTERNAL_SERVER_ERROR)
                     .setPayload(StatusCode.INTERNAL_SERVER_ERROR.getLabel());
-
         }
     }
 

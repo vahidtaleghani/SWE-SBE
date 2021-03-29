@@ -17,6 +17,7 @@ public class ServerThread implements Runnable {
     public void run() {
 
         try {
+            //Holen eine Eingabeanforderung und analysieren
             Request request = new Request(connect.getInputStream());
 
             if (request.isValid()) {
@@ -36,8 +37,8 @@ public class ServerThread implements Runnable {
                     }
                 }
 
-                if (response == null) { // 404
-                    response = Response.Default.notFound();
+                if (response == null) {
+                    response = Response.Default.notFound(); // error 404
                 }
 
             } else {

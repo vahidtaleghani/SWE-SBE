@@ -11,6 +11,8 @@ public abstract class BasicRoute {
 
     abstract public Response processRequest(Request request);
 
+    // Entfernen Sie am Anfang das "Basic"
+    // Gibt alle Informationen zu angemeldeten Benutzern zurück
     public UserModel validateToken(String token) {
         if (token == null) return null;
         String authTokenPrefix = "Basic ";
