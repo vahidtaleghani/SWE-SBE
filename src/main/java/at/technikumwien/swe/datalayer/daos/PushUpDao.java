@@ -69,7 +69,7 @@ public class PushUpDao {
         return true;
     }
 
-    public int getCount(UserEntity userEntity) {
+    public int getSum(UserEntity userEntity) {
         if (userEntity == null) throw new RuntimeException("Cannot count from userEntity = null");
 
         String command = "SELECT SUM(amount) AS total FROM push_ups WHERE username = ?";
@@ -80,7 +80,6 @@ public class PushUpDao {
 
             ResultSet results = stmt.executeQuery();
 
-            List<PushUpEntity> pushUpList = new LinkedList<>();
             if (!results.next()) {
                 throw new RuntimeException("No result retrieved from SUM()");
             }
@@ -91,6 +90,25 @@ public class PushUpDao {
             e.printStackTrace();
             throw new RuntimeException("Couldn't query DB: " + e.getMessage());
         }
+    }
 
+    public int getCount(UserEntity userEntity) {
+        if (userEntity == null) throw new RuntimeException("Cannot count from userEntity = null");
+
+        String command = "SELECT COUNT(*) AS entryCount FROM push_ups WHERE username = ?";
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(command);
+            stmt.setString(1, userEntity.getUsername());
+
+            ResultSet results = stmt.executeQuery();
+
+            if (!results.next()) return 0;
+            return results.getInt("entryCount");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Couldn't query DB: " + e.getMessage());
+        }
     }
 }

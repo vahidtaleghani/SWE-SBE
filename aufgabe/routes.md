@@ -7,7 +7,7 @@
 |yes|GET|/users/{username}|yes|no|
 |yes|PUT|/users/{username}|yes|yes|
 |yes|GET|/stats|yes|no|
-| |GET|/scoreboard|yes|no|
+|yes|GET|/scoreboard|yes|no|
 |yes|GET|/history|yes|no|
 | |GET|/tournament|yes|no|
 |yes|POST|/history|yes|yes|

@@ -18,6 +18,10 @@ public class PushUpRepository {
                 .collect(Collectors.toList());
     }
 
+    public int getSum(UserModel userModel) {
+        return pushUpDao.getSum(userModel.toEntity());
+    }
+
     public int getCount(UserModel userModel) {
         return pushUpDao.getCount(userModel.toEntity());
     }

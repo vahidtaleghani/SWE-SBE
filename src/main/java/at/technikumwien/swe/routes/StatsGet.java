@@ -23,7 +23,7 @@ public class StatsGet extends BasicRoute {
         PushUpRepository pushUpRepository = new PushUpRepository();
         UserRepository userRepository = new UserRepository();
 
-        int totalPushUps = pushUpRepository.getCount(loggedUser);
+        int totalPushUps = pushUpRepository.getSum(loggedUser);
 
         int elo = userRepository.getOneWithElo(loggedUser).getElo();
 
