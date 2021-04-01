@@ -122,6 +122,7 @@ public class UserDao {
     }
 
     public UserEloEntity getOneWithElo(UserEntity userEntity) {
+        //Gibt das Element an der angegebenen Position in dieser Liste zurück.
         return getAllWithElo(userEntity).get(0);
     }
 
@@ -168,7 +169,6 @@ public class UserDao {
             }
 
             ResultSet results = stmt.executeQuery();
-
 
             List<UserEloEntity> userEloEntityList = new LinkedList<>();
             while (results.next()) {

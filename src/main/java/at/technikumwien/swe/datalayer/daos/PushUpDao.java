@@ -15,6 +15,7 @@ public class PushUpDao {
 
     Connection connection = Database.getInstance().getConnection();
 
+    //--- getAll
     public List<PushUpEntity> getAll(String username) {
         if (username == null) return null;
 
@@ -49,6 +50,7 @@ public class PushUpDao {
         );
     }
 
+    //--- create
     public boolean create(PushUpEntity pushUpEntity) {
         if (pushUpEntity == null) return false;
 
@@ -69,6 +71,7 @@ public class PushUpDao {
         return true;
     }
 
+    //--- getSum
     public int getSum(UserEntity userEntity) {
         if (userEntity == null) throw new RuntimeException("Cannot count from userEntity = null");
 
@@ -92,6 +95,8 @@ public class PushUpDao {
         }
     }
 
+
+    //---getCount
     public int getCount(UserEntity userEntity) {
         if (userEntity == null) throw new RuntimeException("Cannot count from userEntity = null");
 
