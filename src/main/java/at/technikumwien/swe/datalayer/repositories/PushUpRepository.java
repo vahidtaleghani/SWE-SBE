@@ -3,6 +3,7 @@ package at.technikumwien.swe.datalayer.repositories;
 import at.technikumwien.swe.datalayer.daos.PushUpDao;
 import at.technikumwien.swe.datalayer.entities.PushUpEntity;
 import at.technikumwien.swe.datalayer.models.PushUpModel;
+import at.technikumwien.swe.datalayer.models.TournamentState;
 import at.technikumwien.swe.datalayer.models.UserModel;
 
 import java.util.List;
@@ -18,6 +19,12 @@ public class PushUpRepository {
                 .collect(Collectors.toList());
     }
 
+    public List<PushUpModel> getAll(TournamentState tournamentState) {
+        return pushUpDao.getAll(tournamentState.getValue())
+                .stream().map(PushUpEntity::toModel)
+                .collect(Collectors.toList());
+    }
+
     public int getSum(UserModel userModel) {
         return pushUpDao.getSum(userModel.toEntity());
     }
@@ -28,5 +35,9 @@ public class PushUpRepository {
 
     public boolean addPushUp(PushUpModel pushUpModel) {
         return pushUpDao.create(pushUpModel.toEntity());
+    }
+
+    public boolean update(PushUpModel pushUpModel) {
+        return pushUpDao.update(pushUpModel.toEntity());
     }
 }

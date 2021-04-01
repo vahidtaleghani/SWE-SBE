@@ -152,6 +152,15 @@ public class UserDao {
                                 GROUP BY p.username),
                                 0
                             )
+                           +
+                           1 * coalesce(
+                               (SELECT COUNT(*)
+                                FROM push_ups p
+                                WHERE p.username = u.username
+                                  AND tournament_state = 1
+                                GROUP BY p.username),
+                                0
+                            )
                         ) AS elo,
                         u.*
                                 

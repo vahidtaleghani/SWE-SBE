@@ -16,6 +16,9 @@ public class ServerThread implements Runnable {
     @Override
     public void run() {
 
+        // Tournier check bei jedem Request
+        TournamentController.handle();
+
         try {
             //Holen eine Eingabeanforderung und analysieren
             Request request = new Request(connect.getInputStream());

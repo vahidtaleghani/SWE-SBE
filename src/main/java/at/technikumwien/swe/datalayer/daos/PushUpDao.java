@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,11 +20,34 @@ public class PushUpDao {
     public List<PushUpEntity> getAll(String username) {
         if (username == null) return null;
 
-        String command = "SELECT id, username, workout_name, amount, duration, tournament_state FROM push_ups WHERE username = ?";
+        String command = "SELECT * FROM push_ups WHERE username = ?";
 
         try {
             PreparedStatement stmt = connection.prepareStatement(command);
             stmt.setString(1, username);
+
+            ResultSet results = stmt.executeQuery();
+
+            List<PushUpEntity> pushUpList = new LinkedList<>();
+            while (results.next()) {
+                pushUpList.add(pushUpRowToEntity(results));
+            }
+            return pushUpList;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //--- getAll
+    public List<PushUpEntity> getAll(int tournamentState) {
+
+        String command = "SELECT * FROM push_ups WHERE tournament_state = ?";
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(command);
+            stmt.setInt(1, tournamentState);
 
             ResultSet results = stmt.executeQuery();
 
@@ -46,29 +70,9 @@ public class PushUpDao {
                 result.getString("workout_name"),
                 result.getInt("amount"),
                 result.getInt("duration"),
+                new Date(result.getTimestamp("added_time").getTime()),
                 result.getInt("tournament_state")
         );
-    }
-
-    //--- create
-    public boolean create(PushUpEntity pushUpEntity) {
-        if (pushUpEntity == null) return false;
-
-        String command = "INSERT INTO push_ups (username, workout_name, amount, duration) VALUES (?, ?, ?, ?)";
-
-        try {
-            PreparedStatement stmt = connection.prepareStatement(command);
-
-            stmt.setString(1, pushUpEntity.getUsername());
-            stmt.setString(2, pushUpEntity.getWorkoutName());
-            stmt.setInt(3, pushUpEntity.getAmount());
-            stmt.setInt(4, pushUpEntity.getDuration());
-
-            stmt.execute();
-        } catch (SQLException e) {
-            return false;
-        }
-        return true;
     }
 
     //--- getSum
@@ -115,5 +119,48 @@ public class PushUpDao {
             e.printStackTrace();
             throw new RuntimeException("Couldn't query DB: " + e.getMessage());
         }
+    }
+
+    //--- create
+    public boolean create(PushUpEntity pushUpEntity) {
+        if (pushUpEntity == null) return false;
+
+        String command = "INSERT INTO push_ups (username, workout_name, amount, duration) VALUES (?, ?, ?, ?)";
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(command);
+
+            stmt.setString(1, pushUpEntity.getUsername());
+            stmt.setString(2, pushUpEntity.getWorkoutName());
+            stmt.setInt(3, pushUpEntity.getAmount());
+            stmt.setInt(4, pushUpEntity.getDuration());
+
+            stmt.execute();
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+
+    //--- update
+    public boolean update(PushUpEntity pushUpEntity) {
+        if (pushUpEntity == null) return false;
+        String command = "UPDATE push_ups SET amount = ?, duration = ?, workout_name = ?, tournament_state = ? WHERE id = ?;";
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(command);
+
+            stmt.setInt(1, pushUpEntity.getAmount());
+            stmt.setInt(2, pushUpEntity.getDuration());
+            stmt.setString(3, pushUpEntity.getWorkoutName());
+            stmt.setInt(4, pushUpEntity.getTournamentState());
+
+            stmt.setInt(5, pushUpEntity.getId());
+
+            stmt.execute();
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
     }
 }

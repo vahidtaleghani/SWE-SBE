@@ -4,7 +4,8 @@ public enum TournamentState {
     IN_PROGRESS(0),
     DRAW(1),
     LOSE(2),
-    WIN(3);
+    WIN(3),
+    FINISHED_BUT_IGNORED(-1);
 
     private final int value;
 
