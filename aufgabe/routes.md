@@ -9,7 +9,7 @@
 |yes|GET|/stats|yes|no|
 |yes|GET|/scoreboard|yes|no|
 |yes|GET|/history|yes|no|
-| |GET|/tournament|yes|no|
+|yes|GET|/tournament|yes|no|
 |yes|POST|/history|yes|yes|
 
 ## Registrierung

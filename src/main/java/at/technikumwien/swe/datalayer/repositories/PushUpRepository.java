@@ -13,6 +13,7 @@ public class PushUpRepository {
 
     private final PushUpDao pushUpDao = new PushUpDao();
 
+
     public List<PushUpModel> getAll(String username) {
         return pushUpDao.getAll(username)
                 .stream().map(PushUpEntity::toModel)

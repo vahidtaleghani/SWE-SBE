@@ -92,6 +92,13 @@ public class Response {
                     .setPayload("OK");
         }
 
+        //--- OK
+        public static Response ok(String message) {
+            return new Response()
+                    .setStatusCode(StatusCode.OK)
+                    .setPayload(message);
+        }
+
         //--- JSON
         public static Response json(Object object) {
             try {

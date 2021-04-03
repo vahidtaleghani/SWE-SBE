@@ -31,7 +31,6 @@ public class Request {
             if (line == null) return;
 
             // Wir analysieren die Anfrage mit einem String-Tokenizer
-            //?????????
             try {
                 StringTokenizer parse = new StringTokenizer(line);
                 method = HttpMethod.fromValue(parse.nextToken()); // Wir erhalten die HTTP-Methode des Clients

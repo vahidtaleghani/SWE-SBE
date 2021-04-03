@@ -15,7 +15,9 @@ public class TournamentController {
         handleAllTournaments(openPushUps);
     }
 
-    private static List<PushUpModel> getOpenPushUps() {
+    // Gibt alle Ziele von push-ups Tabelle,
+    // dass tournament_state = 0 in ein geordneten Liste zurück
+    public static List<PushUpModel> getOpenPushUps() {
         PushUpRepository pushUpRepository = new PushUpRepository();
 
         List<PushUpModel> allModelsWithoutTournament = pushUpRepository.getAll(TournamentState.IN_PROGRESS);
@@ -27,6 +29,11 @@ public class TournamentController {
         return allModelsWithoutTournament;
     }
 
+    // Entfernen Sie Zeilen weniger als zwei Minuten nach der Registrierung aus der Liste
+    // Wählen Sie die Startzeit des letzten Teilnehmers aus und erstellen Sie eine neue Liste,
+    // deren Startzeit nach der Startzeit des letzten Teilnehmers
+    // und vor dem Ende der letzten zwei Minuten der Teilnahme liegt
+    // Fahren Sie fort, bis die ursprüngliche Liste leer ist
     private static void handleAllTournaments(List<PushUpModel> allModelsWithoutTournament) {
 
         int twoMinutesIntervalMilliseconds = 2 * 60 * 1000;
@@ -54,12 +61,12 @@ public class TournamentController {
         }
     }
 
-    private static void handleSingleTournament(List<PushUpModel> currentTournamentList) {
-
-        System.out.println("Single Tournament: " + currentTournamentList);
+    public static Map<String, Integer> calculateSumsPerUser(List<PushUpModel> currentTournamentList) {
 
         Map<String, Integer> pushUpSumMap = new HashMap<>();
 
+        // für alle Teilnehmer*in dass in dieser Liste liegt, gibt die summe von amount zurück
+        // und speichern in ein HashMap
         for (PushUpModel model : currentTournamentList) {
             Integer amount = model.getAmount();
             if (pushUpSumMap.containsKey(model.getUsername())) {
@@ -68,9 +75,15 @@ public class TournamentController {
             pushUpSumMap.put(model.getUsername(), amount);
         }
 
+        return pushUpSumMap;
+    }
+
+    public static List<String> findWinningUserNames(Map<String, Integer> pushUpSumMap) {
+
         int maxPushUps = -1;
         List<String> winnerUserNameList = new LinkedList<>();
 
+        // finden die Gewinner*in/en und speichern in einer Liste
         for (Map.Entry<String, Integer> entry : pushUpSumMap.entrySet()) {
             if (entry.getValue() >= maxPushUps) {
                 if (entry.getValue() > maxPushUps) {
@@ -80,25 +93,49 @@ public class TournamentController {
                 winnerUserNameList.add(entry.getKey());
             }
         }
+        return winnerUserNameList;
+    }
+
+    // Berechnen die summe(amount) von alle Teilnehmer*in
+    // Berechnet Gewinn, Verlust oder Gleichstand
+    // und ändern tournament_state Spalte in push-ups Tabelle
+    private static void handleSingleTournament(List<PushUpModel> currentTournamentList) {
+
+        System.out.println("Single Tournament: " + currentTournamentList);
+
+        Map<String, Integer> pushUpSumMap = calculateSumsPerUser(currentTournamentList);
+
+        List<String> winnerUserNameList = findWinningUserNames(pushUpSumMap);
 
         boolean isDraw = winnerUserNameList.size() > 1;
 
         List<String> pointsEnteredUserNamesList = new LinkedList<>();
 
         for (PushUpModel model : currentTournamentList) {
+
+            //Steuert, dass ein Teilnehmer*in in einer Liste nicht zweimal gewinnt
             if (pointsEnteredUserNamesList.contains(model.getUsername())) {
                 model.setTournamentState(TournamentState.FINISHED_BUT_IGNORED);
                 continue;
             }
+
             pointsEnteredUserNamesList.add(model.getUsername());
+
+            // wenn die Name von Teilnehmer*in in der List liegt -> draw oder win
             if (winnerUserNameList.contains(model.getUsername())) {
+
+                // Wenn die Liste mehr als einen Teilnehmer*in enthält, bedeutet dies Gleichheit
                 if (isDraw) model.setTournamentState(TournamentState.DRAW);
+
                 else model.setTournamentState(TournamentState.WIN);
-            } else {
+            }
+            // wenn die Name von Teilnehmer*in in der List nicht liegt -> lose
+            else {
                 model.setTournamentState(TournamentState.LOSE);
             }
         }
 
+        // DB ändern
         PushUpRepository pushUpRepository = new PushUpRepository();
         for (PushUpModel model : currentTournamentList) {
             pushUpRepository.update(model);
