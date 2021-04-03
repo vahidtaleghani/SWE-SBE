@@ -18,7 +18,6 @@ public class UserRepositoryTest {
         TestHelpers.resetDatabase();
     }
 
-
     @Test
     void getUser() {
         assertNotEquals(null, userRepository.getUser("user1"));
