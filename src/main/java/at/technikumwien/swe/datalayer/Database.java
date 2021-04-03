@@ -3,6 +3,7 @@ package at.technikumwien.swe.datalayer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Database {
 
@@ -43,5 +44,16 @@ public class Database {
 
     public Connection getConnection() {
         return connection;
+    }
+
+    /**
+     * Deletes all data. Database is Empty after calling this method;
+     */
+    public void truncateAllTables() throws SQLException {
+        String command = "truncate table users cascade;\n" +
+                "truncate table push_ups cascade;";
+
+        Statement stmt = connection.createStatement();
+        stmt.execute(command);
     }
 }

@@ -142,7 +142,12 @@ public class PushUpDao {
         return true;
     }
 
-    //--- update
+    /**
+     * This Function replaces all fields of a PushUpEntity
+     *
+     * @param pushUpEntity the entity which should be updated
+     * @return returns true if the update was successful; false otherwise
+     */
     public boolean update(PushUpEntity pushUpEntity) {
         if (pushUpEntity == null) return false;
         String command = "UPDATE push_ups SET amount = ?, duration = ?, workout_name = ?, tournament_state = ? WHERE id = ?;";
