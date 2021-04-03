@@ -74,7 +74,7 @@ echo.
 
 REM --------------------------------------------------
 echo 5) scoreboard (compare elo values and count of pushups accross all users)
-curl -X GET http://localhost:10001/score --header "Authorization: Basic kienboec-sebToken"
+curl -X GET http://localhost:10001/scoreboard --header "Authorization: Basic kienboec-sebToken"
 echo.
 echo.
 
@@ -120,7 +120,7 @@ echo.
 
 REM --------------------------------------------------
 echo 11) scoreboard (compare elo values and count of pushups accross all users; still startup values)
-curl -X GET http://localhost:10001/score --header "Authorization: Basic kienboec-sebToken"
+curl -X GET http://localhost:10001/scoreboard --header "Authorization: Basic kienboec-sebToken"
 echo.
 echo.
 
@@ -170,7 +170,7 @@ echo.
 
 REM --------------------------------------------------
 echo 18) scoreboard 
-curl -X GET http://localhost:10001/score --header "Authorization: Basic kienboec-sebToken"
+curl -X GET http://localhost:10001/scoreboard --header "Authorization: Basic kienboec-sebToken"
 echo.
 echo.
 
