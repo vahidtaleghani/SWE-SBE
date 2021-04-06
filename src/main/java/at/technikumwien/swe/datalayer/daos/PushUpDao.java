@@ -142,12 +142,24 @@ public class PushUpDao {
         return true;
     }
 
-    /**
-     * This Function replaces all fields of a PushUpEntity
-     *
-     * @param pushUpEntity the entity which should be updated
-     * @return returns true if the update was successful; false otherwise
-     */
+    //--- delete
+    public boolean delete(UserEntity userEntity) {
+        if (userEntity == null) return false;
+
+        String command = "DELETE FROM push_ups where username= ?";
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(command);
+            stmt.setString(1, userEntity.getUsername());
+            stmt.execute();
+
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+
+    //---update
     public boolean update(PushUpEntity pushUpEntity) {
         if (pushUpEntity == null) return false;
         String command = "UPDATE push_ups SET amount = ?, duration = ?, workout_name = ?, tournament_state = ? WHERE id = ?;";

@@ -85,21 +85,21 @@ public class Response {
     }
 
     public static class Default {
-        //--- OK
+        //--- Gib OK zurück
         public static Response ok() {
             return new Response()
                     .setStatusCode(StatusCode.OK)
                     .setPayload("OK");
         }
 
-        //--- OK
+        //--- Gib OK mit message zurück
         public static Response ok(String message) {
             return new Response()
                     .setStatusCode(StatusCode.OK)
                     .setPayload(message);
         }
 
-        //--- JSON
+        //--- Gib in JSON zurück
         public static Response json(Object object) {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
@@ -114,38 +114,38 @@ public class Response {
             }
         }
 
-        //--- unauthorized
+        //--- Gib unauthorized zurück
         public static Response unauthorized(String message) {
             return new Response()
                     .setStatusCode(StatusCode.UNAUTHORIZED)
                     .setPayload(StatusCode.UNAUTHORIZED.getLabel() + "\r\n" + message);
         }
 
-        //--- notFound
+        //--- Gib notFound zurück
         public static Response notFound() {
             return new Response()
                     .setStatusCode(StatusCode.NOT_FOUND)
                     .setPayload(StatusCode.NOT_FOUND.getLabel());
         }
 
-        //--- badRequest
+        //--- Gib badRequest zurück
         public static Response badRequest(String message) {
             return new Response()
                     .setStatusCode(StatusCode.BAD_REQUEST)
                     .setPayload(StatusCode.BAD_REQUEST.getLabel() + "\r\n" + message);
         }
 
-        //--- badRequest
+        //--- Gib badRequest mit message zurück
         public static Response badRequest() {
             return badRequest("");
         }
 
-        //--- invalidJsonProvided
+        //--- Gib invalidJsonProvided zurück
         public static Response invalidJsonProvided() {
             return badRequest("Invalid JSON provided. Please check your request body");
         }
 
-        //--- internalServerError
+        //--- Gib internalServerError zurück
         public static Response internalServerError() {
             return new Response()
                     .setStatusCode(StatusCode.INTERNAL_SERVER_ERROR)

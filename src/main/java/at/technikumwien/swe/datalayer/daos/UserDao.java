@@ -121,6 +121,7 @@ public class UserDao {
         return true;
     }
 
+    //--- Elo berechnen
     public UserEloEntity getOneWithElo(UserEntity userEntity) {
         //Gibt das Element an der angegebenen Position in dieser Liste zurück.
         return getAllWithElo(userEntity).get(0);

@@ -53,5 +53,6 @@ public class SebServer {
         routeList.add(new StatsGet());
         routeList.add(new ScoreboardGet());
         routeList.add(new TournamentGet());
+        routeList.add(new HistoryDelete());
     }
 }

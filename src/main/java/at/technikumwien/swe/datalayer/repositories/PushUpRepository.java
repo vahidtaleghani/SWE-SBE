@@ -41,4 +41,8 @@ public class PushUpRepository {
     public boolean update(PushUpModel pushUpModel) {
         return pushUpDao.update(pushUpModel.toEntity());
     }
+
+    public boolean delete(UserModel userModel) {
+        return pushUpDao.delete(userModel.toEntity());
+    }
 }

@@ -46,9 +46,8 @@ public class Database {
         return connection;
     }
 
-    /**
-     * Deletes all data. Database is Empty after calling this method;
-     */
+    //Deletes all data. Database is Empty after calling this method;
+
     public void truncateAllTables() throws SQLException {
         String command = "truncate table users cascade;\n" +
                 "truncate table push_ups cascade;";
