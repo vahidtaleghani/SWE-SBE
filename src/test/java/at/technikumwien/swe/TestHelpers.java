@@ -7,6 +7,8 @@ import at.technikumwien.swe.datalayer.models.UserModel;
 import at.technikumwien.swe.datalayer.repositories.PushUpRepository;
 import at.technikumwien.swe.datalayer.repositories.UserRepository;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -43,5 +45,37 @@ public class TestHelpers {
             pushUp.setTournamentState(TournamentState.LOSE);
             pushUpRepository.update(pushUp);
         }
+    }
+
+
+    public static InputStream generateHttpRequest(String method, String path, String payload, String authToken) {
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        PrintWriter writer = new PrintWriter(new OutputStreamWriter(byteArrayOutputStream, StandardCharsets.US_ASCII));
+
+        writer.print(method + " " + path + " HTTP/1.1\r\n");
+        writer.print("Host: localhost\r\n");
+        if (payload != null) {
+            writer.print("Content-Type: application/json\r\n");
+            writer.print("Content-Length: " + payload.length() + "\r\n");
+        }
+        if (authToken != null) {
+            writer.print("Authorization: Basic " + authToken + "\r\n");
+        }
+        writer.print("\r\n");
+        if (payload != null) writer.print(payload);
+
+        writer.flush();
+
+        return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+    }
+
+    public static int getHttpStatusCode(String httpResponse) {
+        String firstLine = httpResponse.lines().findFirst().get();
+
+        String httpCode = firstLine.split(" ")[1];
+
+        return Integer.parseInt(httpCode);
     }
 }

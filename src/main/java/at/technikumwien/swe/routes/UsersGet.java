@@ -28,7 +28,7 @@ public class UsersGet extends BasicRoute {
         if (loggedUser == null) return Response.Default.unauthorized("No valid authorization token provided.");
 
         if (!loggedUser.getUsername().equals(requestedUserName)) {
-            return Response.Default.unauthorized("You are not authorized to view this profile");
+            return Response.Default.noPermissions("You are not authorized to view this profile");
         }
 
         return Response.Default.json(TransferUser.fromModel(loggedUser));

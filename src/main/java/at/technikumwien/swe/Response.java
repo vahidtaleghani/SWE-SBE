@@ -66,6 +66,7 @@ public class Response {
 
         OK("200 OK"),
         UNAUTHORIZED("401 Unauthorized"),
+        FORBIDDEN("403 Forbidden"),
         NOT_FOUND("404 Not Found"),
         NOT_IMPLEMENTED("501 Not Implemented"),
         BAD_REQUEST("400 Bad Request"),
@@ -119,6 +120,13 @@ public class Response {
             return new Response()
                     .setStatusCode(StatusCode.UNAUTHORIZED)
                     .setPayload(StatusCode.UNAUTHORIZED.getLabel() + "\r\n" + message);
+        }
+
+        //--- Gib forbidden zurück
+        public static Response noPermissions(String message) {
+            return new Response()
+                    .setStatusCode(StatusCode.FORBIDDEN)
+                    .setPayload(StatusCode.FORBIDDEN.getLabel() + "\r\n" + message);
         }
 
         //--- Gib notFound zurück

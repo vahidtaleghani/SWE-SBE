@@ -44,6 +44,7 @@ public class SebServer {
     }
 
     public static void initializeRoutes() {
+        if (!routeList.isEmpty()) return;
         routeList.add(new UsersPost());
         routeList.add(new SessionsPost());
         routeList.add(new UsersGet());
