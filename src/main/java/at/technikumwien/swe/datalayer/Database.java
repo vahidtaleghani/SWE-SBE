@@ -12,6 +12,7 @@ public class Database {
     private static final String HOST = "127.0.0.1";
     private static final String DB_NAME = "postgres";
     private static final int PORT = 5432;
+    //Stellt sicher, dass Änderungen, die zwischen Threads vorgenommen wurden, voneinander gesehen werden
     private static volatile Database instance = null;
     Connection connection = null;
 
@@ -19,6 +20,7 @@ public class Database {
         connect();
     }
 
+    // singleton->So erstellen Sie nur eine Instanz aus einem Objekt
     public static Database getInstance() {
         if (instance == null) instance = new Database();
         return instance;

@@ -12,7 +12,7 @@ public class UserDao {
 
     Connection connection = Database.getInstance().getConnection();
 
-    //--- getOne
+
     public UserEntity getOne(String username) {
         if (username == null) return null;
 
@@ -32,7 +32,7 @@ public class UserDao {
         return null;
     }
 
-    //--- getOneByToken
+
     public UserEntity getOneByToken(String token) {
         if (token == null) return null;
 
@@ -52,7 +52,7 @@ public class UserDao {
         return null;
     }
 
-    //--- userRowToEntity
+
     private UserEntity userRowToEntity(ResultSet result) throws SQLException {
         return new UserEntity(
                 result.getString("username"),
@@ -64,7 +64,7 @@ public class UserDao {
         );
     }
 
-    //--- create
+
     public boolean create(UserEntity userEntity) {
         if (userEntity == null) return false;
         String command = "INSERT INTO users (username, password, token, name, biography, image) VALUES (?, ?, ?, ?, ?, ?)";
@@ -92,7 +92,7 @@ public class UserDao {
         return true;
     }
 
-    //--- update
+
     public boolean update(UserEntity userEntity) {
         if (userEntity == null) return false;
         String command = "UPDATE users SET  password = ?, token = ?, name = ?, biography = ?, image = ? WHERE username = ?;";
@@ -121,7 +121,7 @@ public class UserDao {
         return true;
     }
 
-    //--- Elo berechnen
+
     public UserEloEntity getOneWithElo(UserEntity userEntity) {
         //Gibt das Element an der angegebenen Position in dieser Liste zurück.
         return getAllWithElo(userEntity).get(0);

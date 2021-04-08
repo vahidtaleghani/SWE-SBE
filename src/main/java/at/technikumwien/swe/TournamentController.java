@@ -9,10 +9,14 @@ import java.util.*;
 public class TournamentController {
 
     public static void handle() {
+        handle(2 * 60);
+    }
+
+    public static void handle(int tournamentLengthSeconds) { // Used in UnitTests
         List<PushUpModel> openPushUps = getOpenPushUps();
         if (openPushUps == null) return;
 
-        handleAllTournaments(openPushUps);
+        handleAllTournaments(openPushUps, tournamentLengthSeconds);
     }
 
     // Gibt alle Ziele von push-ups Tabelle,
@@ -34,19 +38,17 @@ public class TournamentController {
     // deren Startzeit nach der Startzeit des letzten Teilnehmers
     // und vor dem Ende der letzten zwei Minuten der Teilnahme liegt
     // Fahren Sie fort, bis die ursprüngliche Liste leer ist
-    private static void handleAllTournaments(List<PushUpModel> allModelsWithoutTournament) {
+    private static void handleAllTournaments(List<PushUpModel> allModelsWithoutTournament, int intervalSeconds) {
 
-        int twoMinutesIntervalMilliseconds = 2 * 60 * 1000;
-        Date twoMinutesAgo = new Date(new Date().getTime() - twoMinutesIntervalMilliseconds);
+        int intervalMilliseconds = intervalSeconds * 1000;
+        Date twoMinutesAgo = new Date(new Date().getTime() - intervalMilliseconds);
 
         while (!allModelsWithoutTournament.isEmpty() && allModelsWithoutTournament.get(0).getAddedTime().before(twoMinutesAgo)) {
 
             Date tournamentStart = allModelsWithoutTournament.get(0).getAddedTime();
-            Date tournamentEnd = new Date(tournamentStart.getTime() + twoMinutesIntervalMilliseconds);
+            Date tournamentEnd = new Date(tournamentStart.getTime() + intervalMilliseconds);
 
             List<PushUpModel> currentTournamentList = new LinkedList<>();
-
-            System.out.println(allModelsWithoutTournament);
 
             for (PushUpModel model : allModelsWithoutTournament) {
                 if (model.getAddedTime().equals(tournamentStart) ||
@@ -101,7 +103,7 @@ public class TournamentController {
     // und ändern tournament_state Spalte in push-ups Tabelle
     private static void handleSingleTournament(List<PushUpModel> currentTournamentList) {
 
-        System.out.println("Single Tournament: " + currentTournamentList);
+        // System.out.println("Single Tournament: " + currentTournamentList);
 
         Map<String, Integer> pushUpSumMap = calculateSumsPerUser(currentTournamentList);
 
