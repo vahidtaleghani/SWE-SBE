@@ -73,16 +73,4 @@ public class TournamentTest {
         assertEquals(3, pushUpRepository.getAll(TournamentState.FINISHED_BUT_IGNORED).size());
     }
 
-    @Test
-    void drawPossible() throws InterruptedException {
-        pushUpRepository.addPushUp(new PushUpModel("user2", "Workout", 5, 20));
-
-        Thread.sleep(1100);
-        TournamentController.handle(1);
-
-        assertEquals(0, pushUpRepository.getAll(TournamentState.WIN).size());
-        assertEquals(0, pushUpRepository.getAll(TournamentState.LOSE).size());
-        assertEquals(2, pushUpRepository.getAll(TournamentState.DRAW).size());
-        assertEquals(3, pushUpRepository.getAll(TournamentState.FINISHED_BUT_IGNORED).size());
-    }
 }
